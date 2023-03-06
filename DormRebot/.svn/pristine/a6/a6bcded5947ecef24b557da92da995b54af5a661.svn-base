@@ -1,0 +1,28 @@
+package com.yangj.model;
+
+import com.yangj.dao.DreamDao;
+import com.yangj.server.Rebot;
+
+public class MyRebot extends Rebot {
+	private DreamDao dreamDao=new DreamDao();
+	
+	@Override
+	public void dealInput(String input) {
+		if(input==null || input.isEmpty() ) {
+			textMsg("欢迎进入解梦游戏，您可以输入你梦到了什么，看看我的法力。");
+			return;
+		}
+		inputMsg(input);
+		String dreamMessage = dreamDao.getDreamMessage(input);
+		if(dreamMessage==null) {
+			textMsg("拜托，你难住我了，兄台，能不能换个词");
+		}
+		textMsg(dreamMessage);
+	}
+
+	@Override
+	public String getName() {
+		return "聊天机器人";
+	}
+
+}

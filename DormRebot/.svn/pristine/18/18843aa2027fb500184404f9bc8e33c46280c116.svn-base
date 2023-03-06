@@ -1,0 +1,78 @@
+package com.yangj.dao;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+public class DreamDao {
+//	程序=数据结构+算法
+//	map
+//	Set
+//	List
+	private Map<String, String> dreams=new HashMap<String, String>();
+	private List<String> messages=new ArrayList<String>();
+	
+	
+	public DreamDao() {
+		initialDrames();
+		initialMessages();
+	}
+
+	private void initialMessages() {
+		try {
+			BufferedReader bufferedReader=
+					new BufferedReader(new InputStreamReader(
+							new FileInputStream("res/message.txt"), "GBK"));
+			String str = null;
+			while((str = bufferedReader.readLine())!=null) {
+				messages.add(str);
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void initialDrames() {
+		try {
+			BufferedReader bufferedReader=
+					new BufferedReader(new InputStreamReader(
+							new FileInputStream("res/周公解梦.csv"), "UTF-8"));
+			String str = null;
+			bufferedReader.readLine();
+			while((str = bufferedReader.readLine())!=null) {
+				String[] array = str.split("\t");
+				dreams.put(array[1], array[2]);
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public String getDreamMessage(String key) {
+		if(dreams.containsKey(key)) {
+			String message = dreams.get(key);
+			int index=new Random().nextInt(messages.size());
+			return message+messages.get(index);
+		}
+		return null;
+	}
+}
